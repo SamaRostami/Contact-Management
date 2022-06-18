@@ -30,8 +30,7 @@ int main()
         switch (menuInpute)
         {
         case 1:
-            DisplayController::addContact(&contacts[CONTACT_COUNTER], contacts, CONTACT_COUNTER);
-            CONTACT_COUNTER += 1;
+            DisplayController::addContact(&contacts[CONTACT_COUNTER], contacts, &CONTACT_COUNTER);
             cout << CONTACT_COUNTER << endl;
             break;
 

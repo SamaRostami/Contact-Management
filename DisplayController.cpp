@@ -9,7 +9,7 @@ using namespace std;
 
 string phoneNumber;
 
-void DisplayController::addContact(Contact *contact, Contact contacts[], int count)
+void DisplayController::addContact(Contact *contact, Contact contacts[], int *count)
 {
     system("cls");
     cout << "............................................\n";
@@ -23,7 +23,7 @@ void DisplayController::addContact(Contact *contact, Contact contacts[], int cou
 checkphoneNumber:
     cout << "Phone number: ";
     cin >> phoneNumber;
-    int contactId = Helper::searchPhoneNumber(phoneNumber, contacts, count);
+    int contactId = Helper::searchPhoneNumber(phoneNumber, contacts, *count);
     if (!(contactId == -1))
     {
         cout << "Contact Already Exists Please Enter Another Phonenumber\n";
@@ -37,6 +37,7 @@ checkphoneNumber:
     cout << "Email: ";
     cin >> contact->email;
     cout << "\n\nNew Contact Inserted Succesfully!";
+    *count += 1;
     Helper::pressEnterToReturn();
 }
 
@@ -233,7 +234,7 @@ void DisplayController::deleteContact(Contact contacts[], int *count)
             }
 
             cout << "\n\nContact Deleted succesfully!";
-            *count += 1;
+            *count -= 1;
             Helper::pressEnterToReturn();
         }
         else if (yesNo == 'N' || yesNo == 'n')
