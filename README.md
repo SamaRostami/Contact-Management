@@ -1,5 +1,7 @@
 # PhoneBook
 
+![Banner](banner.png)
+
 PhoneBook is a simple CLI Contact app developed as a University project. It provides basic functionality for managing a contact list stored in a text database. This README will guide you through building and using the application.
 
 ## Build
