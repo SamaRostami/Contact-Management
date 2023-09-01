@@ -31,7 +31,6 @@ int main()
         {
         case 1:
             DisplayController::addContact(&contacts[CONTACT_COUNTER], contacts, &CONTACT_COUNTER);
-            cout << CONTACT_COUNTER << endl;
             break;
 
         case 2:

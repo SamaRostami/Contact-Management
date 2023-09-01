@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include <windows.h>
+#include <fstream>
+#include <stdlib.h>
 #include <limits>
 #include "Helper.h"
 #include "DisplayController.h"
@@ -8,18 +10,21 @@
 using namespace std;
 
 string phoneNumber;
+int i = 1;
 
 void DisplayController::addContact(Contact *contact, Contact contacts[], int *count)
 {
     system("cls");
+    Contact newContact;
+    ofstream phone("contacts.txt", ios::app);
     cout << "............................................\n";
     cout << "               Contact Manager \n";
     cout << "............................................\n\n";
     cout << "::::::::::::::: Add Contact :::::::::::::::\n\n";
     cout << "First Name : ";
-    cin >> contact->firstName;
+    cin >> newContact.firstName;
     cout << "Last Name: ";
-    cin >> contact->lastName;
+    cin >> newContact.lastName;
 checkphoneNumber:
     cout << "Phone number: ";
     cin >> phoneNumber;
@@ -29,38 +34,56 @@ checkphoneNumber:
         cout << "Contact Already Exists Please Enter Another Phonenumber\n";
         goto checkphoneNumber;
     }
-    contact->phoneNumber = phoneNumber;
+    newContact.phoneNumber = phoneNumber;
     cout << "Age ( 0 For unknown ): ";
-    cin >> contact->age;
+    cin >> newContact.age;
     cout << "Address: ";
-    cin >> contact->address;
+    cin >> newContact.address;
     cout << "Email: ";
-    cin >> contact->email;
-    cout << "\n\nNew Contact Inserted Succesfully!";
-    *count += 1;
+    cin >> newContact.email;
+    if (phone.is_open())
+    {
+        phone << newContact.firstName << " "
+              << newContact.lastName << " "
+              << newContact.age << " "
+              << newContact.address << " "
+              << newContact.email << " "
+              << newContact.age << " "
+              << newContact.phoneNumber << endl;
+        cout << "\n\nNew Contact Inserted Succesfully!";
+        *count += 1;
+    }
+    else
+    {
+        cout << "\n\tError in opening record!";
+    }
+
     Helper::pressEnterToReturn();
 }
 
 void DisplayController::listContact(Contact contacts[], int count)
 {
     system("cls");
+    Contact listContact;
+    ifstream testcontacts("contacts.txt");
     cout << "............................................\n";
     cout << "               Contact Manager \n";
     cout << "............................................\n\n";
     cout << "::::::::::::::: Contact List :::::::::::::::\n\n";
     if (!count == 0)
     {
-        for (int i = 0; i < count; i++)
+        while (testcontacts >> listContact.firstName >> listContact.lastName >> listContact.age >> listContact.address >> listContact.email >> listContact.phoneNumber)
         {
 
-            cout << i + 1 << ")"
-                 << "\tFirst Name: " << contacts[i].firstName
-                 << "\tLast Name: " << contacts[i].lastName
-                 << "\tAge: " << contacts[i].age
-                 << "\tAddress: " << contacts[i].address
-                 << "\tEmail: " << contacts[i].email
-                 << "\tPhone Number: " << contacts[i].phoneNumber
+            cout << i << ")"
+                 << "\tFirst Name: " << listContact.firstName
+                 << "\tLast Name: " << listContact.lastName
+                 << "\tAge: " << listContact.age
+                 << "\tAddress: " << listContact.address
+                 << "\tEmail: " << listContact.email
+                 << "\tPhone Number: " << listContact.phoneNumber
                  << endl;
+            i++;
         }
     }
     else
@@ -73,30 +96,37 @@ void DisplayController::listContact(Contact contacts[], int count)
 
 void DisplayController::searchByName(Contact contacts[], int count)
 {
-    string searchQuery;
+
     system("cls");
+    bool found = false;
+    string searchQuery;
+    Contact listContact;
+    ifstream testcontacts("contacts.txt");
     cout << "............................................\n";
     cout << "               Contact Manager \n";
     cout << "............................................\n\n";
     cout << "::::::::::::::: Contact Search :::::::::::::::\n\n";
     cout << "Enter Contact Name For Search : ";
     cin >> searchQuery;
-    int contactId = Helper::searchName(searchQuery, contacts, count);
-    if (contactId == -1)
+    while (testcontacts >> listContact.firstName >> listContact.lastName >> listContact.age >> listContact.address >> listContact.email >> listContact.phoneNumber)
+    {
+        if (searchQuery == listContact.firstName || searchQuery == listContact.firstName)
+        {
+
+            cout << "\tFirst Name: " << listContact.firstName
+                 << "\tLast Name: " << listContact.lastName
+                 << "\tAge: " << listContact.age
+                 << "\tAddress: " << listContact.address
+                 << "\tEmail: " << listContact.email
+                 << "\tPhone Number: " << listContact.phoneNumber
+                 << endl;
+            found = true;
+            break;
+        }
+    }
+    if (found == false)
     {
         Helper::noResultFound();
-    }
-    else
-    {
-        cout << "\n"
-             << contactId + 1 << ")"
-             << "\tFirst Name: " << contacts[contactId].firstName
-             << "\tLast Name: " << contacts[contactId].lastName
-             << "\tAge: " << contacts[contactId].age
-             << "\tAddress: " << contacts[contactId].address
-             << "\tEmail: " << contacts[contactId].email
-             << "\tPhone Number: " << contacts[contactId].phoneNumber
-             << endl;
     }
 
     Helper::pressEnterToReturn();
@@ -271,7 +301,7 @@ void DisplayController::deleteData(Contact contacts[], int *count)
 
         if (yesNo == 'Y' || yesNo == 'y')
         {
-            delete(contacts);
+            delete (contacts);
             cout << "\n\nContacts Deleted succesfully!";
             *count = 0;
             Helper::pressEnterToReturn();
