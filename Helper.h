@@ -1,3 +1,6 @@
+#ifndef HELPER_H
+#define HELPER_H
+
 #include <string>
 
 using std::string;
@@ -22,3 +25,5 @@ class Helper
         static int searchName(string searchQuery, Contact contacts[], int count);
         static int searchPhoneNumber(string searchQuery, Contact contacts[], int count);
 };
+
+#endif

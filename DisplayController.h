@@ -1,3 +1,6 @@
+#ifndef DISPLAYCONTROLLER_H
+#define DISPLAYCONTROLLER_H
+
 #include <iostream>
 #include <string>
 #include <limits>
@@ -14,3 +17,5 @@ class DisplayController
         static void deleteContact(Contact contacts[], int *count);
         static void deleteData(Contact contacts[], int *count);
 };
+
+#endif

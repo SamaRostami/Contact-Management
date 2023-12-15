@@ -3,6 +3,7 @@
 #include <limits>
 #include <string>
 #include "Helper.h"
+#include "ArrayFileManager.h"
 #include "DisplayController.h"
 using namespace std;
 
@@ -10,7 +11,11 @@ int CONTACT_COUNTER = 0;
 
 int main()
 {
-    Contact contacts[100];
+    const int NUM_CONTACTS = 100;
+    Contact contacts[NUM_CONTACTS];
+
+    ArrayFileManager::loadArrayFromFile(contacts, CONTACT_COUNTER, "contacts.txt");
+
     while (true)
     {
         system("cls");
@@ -31,6 +36,7 @@ int main()
         {
         case 1:
             DisplayController::addContact(&contacts[CONTACT_COUNTER], contacts, &CONTACT_COUNTER);
+            cout << CONTACT_COUNTER << endl;
             break;
 
         case 2:
@@ -55,6 +61,7 @@ int main()
 
         case 0:
             cout << "Have a nice day!" << endl;
+            ArrayFileManager::saveArrayToFile(contacts, CONTACT_COUNTER, "contacts.txt");
             exit(0);
 
         default:
@@ -63,5 +70,6 @@ int main()
         }
     }
 
+    ArrayFileManager::saveArrayToFile(contacts, CONTACT_COUNTER, "contacts.txt");
     return 0;
 }
